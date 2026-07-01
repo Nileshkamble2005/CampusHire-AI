@@ -13,7 +13,6 @@ from werkzeug.security import (
 )
 
 from database import connection
-import pymysql
 
 # Create Blueprint
 auth = Blueprint("auth", __name__)

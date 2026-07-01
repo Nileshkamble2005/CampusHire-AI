@@ -8,7 +8,10 @@ from routes.ai_routes import ai
 
 app = Flask(__name__)
 
-app.secret_key = "campushire_ai_secret_key"
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "campushire_ai_secret_key"
+)
 
 UPLOAD_FOLDER = "uploads/resumes"
 PROFILE_PIC_FOLDER = "uploads/profile_pics"
