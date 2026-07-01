@@ -1,7 +1,7 @@
 # ============================================================
 # CampusHire AI - Production Requirements
 # Clean, Render-safe, Python 3.12 compatible
-# Auto-resolved transitive deps from google-generativeai
+# Transitive deps for google-generativeai resolved by pip
 # ============================================================
 
 # Web Framework
@@ -28,12 +28,3 @@ Pillow==10.4.0
 
 # HTTP
 requests==2.32.3
-
-# NLP (optional, kept for future use)
-spacy==3.7.5
-
-# Data Science (optional, kept for future use)
-pandas==2.2.2
-numpy==1.26.4
-scipy==1.13.1
-scikit-learn==1.5.1
