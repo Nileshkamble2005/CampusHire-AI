@@ -39,36 +39,41 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        cursor = connection.cursor()
+        try:
+            cursor = connection.cursor()
 
-        cursor.execute(
-            "SELECT * FROM users WHERE email=%s",
-            (email,)
-        )
+            cursor.execute(
+                "SELECT * FROM users WHERE email=%s",
+                (email,)
+            )
 
-        user = cursor.fetchone()
+            user = cursor.fetchone()
 
-        if user:
+            if user:
 
-            if check_password_hash(user["password"], password):
+                if check_password_hash(user["password"], password):
 
-                session["user_id"] = user["id"]
-                session["name"] = user["name"]
-                session["role"] = user["role"]
+                    session["user_id"] = user["id"]
+                    session["name"] = user["name"]
+                    session["role"] = user["role"]
 
-                flash("Login Successful!", "success")
+                    flash("Login Successful!", "success")
 
-                if user["role"] == "Student":
-                    return redirect("/student_dashboard")
+                    if user["role"] == "Student":
+                        return redirect("/student_dashboard")
+
+                    else:
+                        return redirect("/recruiter_dashboard")
 
                 else:
-                    return redirect("/recruiter_dashboard")
+                    flash("Incorrect Password!", "danger")
 
             else:
-                flash("Incorrect Password!", "danger")
+                flash("Email not registered!", "danger")
 
-        else:
-            flash("Email not registered!", "danger")
+        except Exception as e:
+            print(f"Login DB error: {e}")
+            flash("Database connection error. Please try again later.", "danger")
 
     return render_template("login.html")
 
@@ -99,62 +104,32 @@ def register():
         designation = request.form.get("designation", "")
 
         if password != confirm_password:
-
            flash("Passwords do not match!", "danger")
            return redirect("/register")
 
-        cursor = connection.cursor()
+        try:
+            cursor = connection.cursor()
 
-        # Check Duplicate Email
-        cursor.execute(
-            "SELECT * FROM users WHERE email=%s",
-            (email,)
-        )
+            # Check Duplicate Email
+            cursor.execute(
+                "SELECT * FROM users WHERE email=%s",
+                (email,)
+            )
 
-        existing_user = cursor.fetchone()
+            existing_user = cursor.fetchone()
 
-        if existing_user:
+            if existing_user:
+                flash("Email already registered!", "warning")
+                return redirect("/register")
 
-            flash("Email already registered!", "warning")
-            return redirect("/register")
+            hashed_password = generate_password_hash(password)
 
-        hashed_password = generate_password_hash(password)
-
-        sql = """
-        INSERT INTO users
-        (
-            name,
-            email,
-            password,
-            phone,
-            college,
-            branch,
-            year,
-            company,
-            designation,
-            role
-        )
-        VALUES
-        (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s
-        )
-        """
-
-        cursor.execute(
-            sql,
+            sql = """
+            INSERT INTO users
             (
-                fullname,
+                name,
                 email,
-                hashed_password,
+                password,
                 phone,
                 college,
                 branch,
@@ -163,12 +138,46 @@ def register():
                 designation,
                 role
             )
-        )
+            VALUES
+            (
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s
+            )
+            """
 
-        connection.commit()
+            cursor.execute(
+                sql,
+                (
+                    fullname,
+                    email,
+                    hashed_password,
+                    phone,
+                    college,
+                    branch,
+                    year,
+                    company,
+                    designation,
+                    role
+                )
+            )
 
-        flash("Registration Successful! Please login.", "success")
-        return redirect("/login")
+            connection.commit()
+
+            flash("Registration Successful! Please login.", "success")
+            return redirect("/login")
+
+        except Exception as e:
+            print(f"Register DB error: {e}")
+            connection.rollback()
+            flash("Database connection error. Please try again later.", "danger")
 
     return render_template("register.html")
 
