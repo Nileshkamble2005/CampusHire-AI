@@ -1,4 +1,4 @@
-﻿annotated-doc==0.0.4
+annotated-doc==0.0.4
 annotated-types==0.7.0
 anyio==4.14.1
 blinker==1.9.0
@@ -60,13 +60,13 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 requests==2.34.2
 rich==15.0.0
-scikit-learn==1.9.0
-scipy==1.18.0
+scikit-learn==1.7.2
+scipy==1.16.2
 setuptools==82.0.1
 shellingham==1.5.4
 six==1.17.0
 smart_open==8.0.0
-spacy==3.8.14
+spacy==3.8.13
 spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 srsly==2.5.3
