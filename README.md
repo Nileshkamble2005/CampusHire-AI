@@ -1,6 +1,6 @@
 # CampusHire AI: AI Campus Placement Portal
 
-CampusHire AI is an intelligent placement portal built using Flask, MySQL, Bootstrap 5, and Google Gemini. The application is designed to streamline the campus hiring process for both students and recruiters by utilizing AI to analyze resumes, calculate resume quality scores, suggest career roles, and rank candidates for job matching.
+CampusHire AI is an intelligent placement portal built using Flask, PostgreSQL, Bootstrap 5, and Google Gemini. The application is designed to streamline the campus hiring process for both students and recruiters by utilizing AI to analyze resumes, calculate resume quality scores, suggest career roles, and rank candidates for job matching.
 
 ---
 
@@ -45,7 +45,7 @@ Match scores are calculated using a weighted average in Python:
 
 ## Tech Stack
 - **Backend**: Python Flask
-- **Database**: MySQL (PyMySQL client)
+- **Database**: PostgreSQL (psycopg2-binary client)
 - **Frontend**: HTML5, CSS3 (Vanilla CSS + Bootstrap 5), JavaScript
 - **AI Integration**: Google Gemini API (`gemini-2.5-flash` model)
 - **Resume Parsing**: `pdfplumber` (text extraction) & Local regex-based skill parser
@@ -82,11 +82,13 @@ copy .env.example .env
 Ensure you provide a valid `GEMINI_API_KEY` from Google AI Studio.
 
 ### 5. Run Database Migrations
-Make sure your MySQL server is running. Ensure a database named `AI_Campus_Placement` is created, then run the migration script:
+Make sure your **PostgreSQL server is running** (default port `5432`). Then run the migration script — it will automatically create the `AI_Campus_Placement` database if it doesn't exist and build all tables:
 ```bash
 python run_migration.py
 ```
-This script adds the necessary profile columns, detailed job attributes, and sets up `ON DELETE CASCADE` constraints.
+This script creates 6 tables (`users`, `jobs`, `resume_analysis`, `job_matches`, `applications`, `shortlisted_candidates`) with all required columns, foreign keys, and `ON DELETE CASCADE` constraints.
+
+> **Note**: See `POSTGRES_MIGRATION.md` for a full guide on PostgreSQL setup, environment variables, and re-running the schema.
 
 ### 6. Run the Application (Development)
 Start the Flask development server:
@@ -108,4 +110,4 @@ waitress-serve --port=5000 app:app
 - **Role-Based Security**: Handled via blueprint-level `before_request` filters to ensure students cannot access recruiter panels, and vice versa.
 - **IDOR Protection**: Enforced on `/download_resume/<int:student_id>` endpoints to ensure students can only download their own resumes, while recruiters can download any applicant's resume.
 - **File Upload Validation**: Restricts resume uploads strictly to PDF formats under a 5MB size threshold, and limits profile picture uploads to PNG, JPG, JPEG, and GIF formats under a 2MB threshold.
-- **SQL Injection Prevention**: PyMySQL parameterized queries utilized for all database requests.
+- **SQL Injection Prevention**: psycopg2 parameterized queries (`%s` placeholders) used for all database operations to prevent SQL injection.
