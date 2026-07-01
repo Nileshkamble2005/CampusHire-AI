@@ -1,16 +1,12 @@
 # ============================================================
 # CampusHire AI - Production Requirements
-# Minimal, Render-safe, no source compilation required
+# Clean, Render-safe, Python 3.12 compatible
+# Auto-resolved transitive deps from google-generativeai
 # ============================================================
 
 # Web Framework
 Flask==3.0.3
 Werkzeug==3.0.3
-Jinja2==3.1.4
-itsdangerous==2.2.0
-click==8.1.7
-MarkupSafe==2.1.5
-blinker==1.8.2
 
 # WSGI Server (production)
 gunicorn==22.0.0
@@ -21,34 +17,23 @@ psycopg2-binary==2.9.9
 # Environment Variables
 python-dotenv==1.0.1
 
-# Google Gemini AI
+# Google Gemini AI (transitive deps resolved automatically by pip)
 google-generativeai==0.7.2
-google-api-core==2.19.1
-google-api-python-client==2.137.0
-google-auth==2.32.0
-google-auth-httplib2==0.2.0
-googleapis-common-protos==1.63.2
-proto-plus==1.24.0
-protobuf==5.27.3
-grpcio==1.65.1
-grpcio-status==1.65.1
 
 # PDF Resume Parsing
 pdfplumber==0.11.4
-pdfminer.six==20231228
 
 # Image Processing (profile pictures)
 Pillow==10.4.0
 
 # HTTP
 requests==2.32.3
-urllib3==2.2.2
-certifi==2024.7.4
-charset-normalizer==3.3.2
-idna==3.7
 
-# Utilities
-python-dateutil==2.9.0.post0
-six==1.16.0
-packaging==24.1
-typing_extensions==4.12.2
+# NLP (optional, kept for future use)
+spacy==3.7.5
+
+# Data Science (optional, kept for future use)
+pandas==2.2.2
+numpy==1.26.4
+scipy==1.13.1
+scikit-learn==1.5.1
