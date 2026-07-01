@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>Create Account | CampusHire AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="register-page">
+
+<div class="container py-5">
+
+{% include "partials/flash_messages.html" %}
+
+<div class="row justify-content-center align-items-center">
+
+<!-- Left Side -->
+
+<div class="col-lg-5 d-none d-lg-block">
+
+<div class="text-white p-5">
+
+<h1 class="fw-bold display-5">
+
+🤖 CampusHire AI
+
+</h1>
+
+<p class="lead mt-4">
+
+Build your career with AI-powered campus recruitment.
+
+</p>
+
+<hr class="border-light">
+
+<div class="mt-4">
+
+<p>
+
+✅ AI Resume Analysis
+
+</p>
+
+<p>
+
+✅ AI Job Matching
+
+</p>
+
+<p>
+
+✅ AI Candidate Ranking
+
+</p>
+
+<p>
+
+✅ Interview Readiness
+
+</p>
+
+<p>
+
+✅ Smart Placement Portal
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Right Side -->
+
+<div class="col-lg-7">
+
+<div class="register-card shadow-lg">
+
+<div class="text-center mb-4">
+
+<i class="bi bi-person-plus-fill text-primary"
+style="font-size:60px;"></i>
+
+<h2 class="fw-bold mt-3">
+
+Create Your Account
+
+</h2>
+
+<p class="text-muted">
+
+Join CampusHire AI and start your placement journey.
+
+</p>
+
+</div>
+
+<form
+action="/register"
+method="POST">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Full Name
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="bi bi-person-fill"></i>
+
+</span>
+
+<input
+type="text"
+class="form-control"
+name="fullname"
+placeholder="Enter Full Name"
+required>
+
+</div>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Email Address
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="bi bi-envelope-fill"></i>
+
+</span>
+
+<input
+type="email"
+id="email"
+class="form-control"
+name="email"
+placeholder="Enter Email"
+onkeyup="validateEmail()"
+required>
+
+</div>
+
+<small id="emailMessage"></small>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Phone Number
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="bi bi-telephone-fill"></i>
+
+</span>
+
+<input
+type="tel"
+id="phone"
+class="form-control"
+name="phone"
+maxlength="10"
+placeholder="9876543210"
+onkeyup="validatePhone()"
+required>
+
+</div>
+
+<small id="phoneMessage"></small>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Password
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="bi bi-lock-fill"></i>
+
+</span>
+
+<input
+type="password"
+id="password"
+class="form-control"
+name="password"
+placeholder="Create Password"
+onkeyup="checkStrength()"
+required>
+
+<button
+class="btn btn-outline-secondary"
+type="button"
+onclick="togglePassword('password',this)">
+
+<i class="bi bi-eye"></i>
+
+</button>
+
+</div>
+
+<div class="progress mt-2"
+style="height:8px;">
+
+<div
+id="strengthBar"
+class="progress-bar"
+style="width:0%;">
+
+</div>
+
+</div>
+
+<small id="strengthText">
+
+Password Strength
+
+</small>
+
+</div>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Confirm Password
+
+</label>
+
+<div class="input-group">
+
+<span class="input-group-text">
+
+<i class="bi bi-lock-fill"></i>
+
+</span>
+
+<input
+
+type="password"
+
+id="confirmPassword"
+
+class="form-control"
+
+name="confirm_password"
+
+placeholder="Confirm Password"
+
+onkeyup="checkMatch()"
+
+required>
+
+<button
+
+class="btn btn-outline-secondary"
+
+type="button"
+
+onclick="togglePassword('confirmPassword',this)">
+
+<i class="bi bi-eye"></i>
+
+</button>
+
+</div>
+
+<small id="matchMessage"></small>
+
+</div>
+
+</div>
+
+<hr>
+
+<h5 class="fw-bold mb-3">
+
+Select Account Type
+
+</h5>
+
+<div class="row mb-4">
+
+<div class="col-6">
+
+<input
+
+class="btn-check"
+
+type="radio"
+
+name="role"
+
+id="student"
+
+value="Student"
+
+checked
+
+onclick="showStudent()">
+
+<label
+
+class="btn btn-outline-primary w-100 py-3"
+
+for="student">
+
+<i class="bi bi-mortarboard-fill fs-4"></i>
+
+<br>
+
+Student
+
+</label>
+
+</div>
+
+<div class="col-6">
+
+<input
+
+class="btn-check"
+
+type="radio"
+
+name="role"
+
+id="recruiter"
+
+value="Recruiter"
+
+onclick="showRecruiter()">
+
+<label
+
+class="btn btn-outline-primary w-100 py-3"
+
+for="recruiter">
+
+<i class="bi bi-building-fill fs-4"></i>
+
+<br>
+
+Recruiter
+
+</label>
+
+</div>
+
+</div>
+
+<!-- ================= Student Fields ================= -->
+
+<div id="studentFields">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+College Name
+
+</label>
+
+<input
+
+class="form-control"
+
+name="college"
+
+placeholder="Enter College Name">
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Branch
+
+</label>
+
+<select
+
+class="form-select"
+
+name="branch">
+
+<option value="">
+
+Select Branch
+
+</option>
+
+<option>
+
+Artificial Intelligence & Data Science
+
+</option>
+
+<option>
+
+Computer Science
+
+</option>
+
+<option>
+
+Information Technology
+
+</option>
+
+<option>
+
+Electronics Engineering
+
+</option>
+
+<option>
+
+Mechanical Engineering
+
+</option>
+
+<option>
+
+Civil Engineering
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Year
+
+</label>
+
+<select
+
+class="form-select"
+
+name="year">
+
+<option value="">
+
+Select Year
+
+</option>
+
+<option>
+
+1st Year
+
+</option>
+
+<option>
+
+2nd Year
+
+</option>
+
+<option>
+
+3rd Year
+
+</option>
+
+<option>
+
+4th Year
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= Recruiter Fields ================= -->
+
+<div
+
+id="recruiterFields"
+
+style="display:none;">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Company Name
+
+</label>
+
+<input
+
+class="form-control"
+
+name="company"
+
+placeholder="Enter Company Name">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Designation
+
+</label>
+
+<input
+
+class="form-control"
+
+name="designation"
+
+placeholder="HR / Recruiter / Manager">
+
+</div>
+
+</div>
+
+<div class="d-grid mt-4">
+
+<button
+
+type="submit"
+
+id="registerBtn"
+
+class="btn btn-primary btn-lg">
+
+<i class="bi bi-person-plus-fill"></i>
+
+Create Account
+
+</button>
+
+</div>
+
+</form>
+
+<hr class="my-4">
+
+<div class="text-center">
+
+<p>
+
+Already have an account?
+
+<a
+
+href="/login"
+
+class="fw-bold text-decoration-none">
+
+Login Here
+
+</a>
+
+</p>
+
+<a
+
+href="/"
+
+class="btn btn-outline-primary">
+
+<i class="bi bi-house-door-fill"></i>
+
+Back to Home
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

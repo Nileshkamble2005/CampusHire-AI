@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>Edit Job | CampusHire AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+
+<div class="container">
+
+<a class="navbar-brand fw-bold text-primary"
+href="/">
+
+🤖 CampusHire AI
+
+</a>
+
+<a href="/recruiter_dashboard"
+class="btn btn-outline-primary">
+
+<i class="bi bi-speedometer2"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+</nav>
+
+<div class="container py-5">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-9">
+
+<div class="card border-0 shadow-lg rounded-4">
+
+<div class="card-body p-5">
+
+<div class="text-center mb-5">
+
+<div class="display-2">
+
+✏️
+
+</div>
+
+<h2 class="fw-bold">
+
+Edit Job
+
+</h2>
+
+<p class="text-muted">
+
+Update the job details below and save your changes.
+
+</p>
+
+</div>
+
+<form method="POST">
+
+<div class="row">
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-briefcase-fill text-primary"></i>
+
+Job Title
+
+</label>
+
+<input
+
+type="text"
+
+name="title"
+
+class="form-control form-control-lg"
+
+value="{{ job.title }}"
+
+required>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-building text-primary"></i>
+
+Company Name
+
+</label>
+
+<input
+
+type="text"
+
+name="company"
+
+class="form-control form-control-lg"
+
+value="{{ job.company }}"
+
+required>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-geo-alt-fill text-primary"></i>
+
+Location
+
+</label>
+
+<input
+
+type="text"
+
+name="location"
+
+class="form-control form-control-lg"
+
+value="{{ job.location | default('', true) }}">
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-currency-rupee text-primary"></i>
+
+Salary (Optional)
+
+</label>
+
+<input
+
+type="text"
+
+name="salary"
+
+class="form-control form-control-lg"
+
+value="{{ job.salary | default('', true) }}"
+
+placeholder="8 - 12 LPA">
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-clock-history text-primary"></i>
+
+Status
+
+</label>
+
+<select
+
+name="status"
+
+class="form-select form-select-lg">
+
+<option {% if job.status == 'Open' %}selected{% endif %}>Open</option>
+
+<option {% if job.status == 'Closed' %}selected{% endif %}>Closed</option>
+
+</select>
+
+</div>
+
+<div class="col-12">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-card-text text-primary"></i>
+
+Job Description
+
+</label>
+
+<textarea
+
+name="description"
+
+rows="8"
+
+class="form-control"
+
+placeholder="Update the complete job description..."
+
+required>{{ job.description | default('', true) }}</textarea>
+
+</div>
+
+</div>
+
+<hr class="my-4">
+
+<!-- Extra Information -->
+
+<div class="row">
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-tools text-primary"></i>
+
+Required Skills
+
+</label>
+
+<input
+
+type="text"
+
+name="required_skills"
+
+class="form-control"
+
+value="{{ job.required_skills | default('', true) }}"
+
+placeholder="Python, SQL, Machine Learning">
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-graph-up-arrow text-primary"></i>
+
+Experience
+
+</label>
+
+<select
+
+name="experience"
+
+class="form-select">
+
+<option {% if job.experience == 'Fresher' %}selected{% endif %}>
+
+Fresher
+
+</option>
+
+<option {% if job.experience == '0-2 Years' %}selected{% endif %}>
+
+0-2 Years
+
+</option>
+
+<option {% if job.experience == '2-5 Years' %}selected{% endif %}>
+
+2-5 Years
+
+</option>
+
+<option {% if job.experience == '5+ Years' %}selected{% endif %}>
+
+5+ Years
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-clock-fill text-primary"></i>
+
+Employment Type
+
+</label>
+
+<select
+
+name="employment_type"
+
+class="form-select">
+
+<option {% if job.employment_type == 'Full Time' %}selected{% endif %}>
+
+Full Time
+
+</option>
+
+<option {% if job.employment_type == 'Internship' %}selected{% endif %}>
+
+Internship
+
+</option>
+
+<option {% if job.employment_type == 'Part Time' %}selected{% endif %}>
+
+Part Time
+
+</option>
+
+<option {% if job.employment_type == 'Remote' %}selected{% endif %}>
+
+Remote
+
+</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label fw-semibold">
+
+<i class="bi bi-calendar-event text-primary"></i>
+
+Application Deadline
+
+</label>
+
+<input
+
+type="date"
+
+name="deadline"
+
+value="{{ job.deadline }}"
+
+class="form-control">
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-between">
+
+<a
+
+href="/recruiter_dashboard"
+
+class="btn btn-outline-secondary btn-lg">
+
+<i class="bi bi-arrow-left-circle"></i>
+
+Back
+
+</a>
+
+<button
+
+type="submit"
+
+class="btn btn-warning btn-lg px-5">
+
+<i class="bi bi-check-circle-fill"></i>
+
+Update Job
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer class="text-center mt-5 mb-4 text-muted">
+
+<hr>
+
+<p>
+
+© 2026
+
+<strong>CampusHire AI</strong>
+
+<br>
+
+AI Powered Campus Placement Portal
+
+</p>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

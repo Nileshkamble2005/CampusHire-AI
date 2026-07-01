@@ -1,0 +1,26 @@
+# Virtual Environment
+venv/
+.venv/
+ENV/
+env/
+
+# Python Cache Files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables Configuration
+.env
+
+# Flask Instance folder
+instance/
+
+# Local Uploads (Resumes and profile photos stored during development)
+uploads/resumes/*
+!uploads/resumes/.gitkeep
+uploads/profile_pics/*
+!uploads/profile_pics/.gitkeep
+
+# OS generated files
+.DS_Store
+Thumbs.db

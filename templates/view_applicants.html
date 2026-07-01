@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>Applicants | CampusHire AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+
+<div class="container">
+
+<a class="navbar-brand fw-bold text-primary"
+href="/">
+
+🤖 CampusHire AI
+
+</a>
+
+<div>
+
+<a href="/recruiter_dashboard"
+class="btn btn-outline-primary">
+
+<i class="bi bi-speedometer2"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<div class="container py-5">
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+
+<div>
+
+<h2 class="fw-bold">
+
+👨‍🎓 Applicants
+
+</h2>
+
+<p class="text-muted">
+
+AI Ranked Applicants for this Job
+
+</p>
+
+</div>
+
+<span class="badge bg-primary fs-6">
+
+{{ applicants|length }} Applicants
+
+</span>
+
+</div>
+
+{% if applicants %}
+
+{% set rank = namespace(value=1) %}
+
+{% for student in applicants %}
+
+<div class="card shadow-lg border-0 rounded-4 mb-4">
+
+<div class="card-body p-4">
+
+<div class="row">
+
+<div class="col-lg-8">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+{% if rank.value == 1 %}
+
+<span class="badge bg-warning fs-6">
+
+🥇 Rank #1
+
+</span>
+
+{% elif rank.value == 2 %}
+
+<span class="badge bg-secondary fs-6">
+
+🥈 Rank #2
+
+</span>
+
+{% elif rank.value == 3 %}
+
+<span class="badge text-bg-dark fs-6">
+
+🥉 Rank #3
+
+</span>
+
+{% else %}
+
+<span class="badge bg-primary fs-6">
+
+🏅 Rank #{{ rank.value }}
+
+</span>
+
+{% endif %}
+
+<h3 class="mt-3">
+
+{{ student.name }}
+
+</h3>
+
+<p class="text-muted">
+
+<i class="bi bi-envelope-fill"></i>
+
+{{ student.email }}
+
+</p>
+
+</div>
+
+<div class="text-end">
+
+<h4 class="text-success">
+
+{{ student.resume_score }}%
+
+</h4>
+
+<small>
+
+Resume Score
+
+</small>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="row text-center mb-4">
+
+<div class="col-md-4">
+
+<div class="card bg-primary text-white">
+
+<div class="card-body">
+
+<h3>
+
+{{ student.resume_score | default(0, true) }}%
+
+</h3>
+
+<small>
+
+Resume
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card bg-success text-white">
+
+<div class="card-body">
+
+<h3>
+
+{{ student.match_score }}%
+
+</h3>
+
+<small>
+
+AI Match
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card bg-warning">
+
+<div class="card-body">
+
+<h3>
+
+{{ rank.value }}
+
+</h3>
+
+<small>
+
+Rank
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= AI Analysis ================= -->
+
+<h5 class="fw-bold">
+
+🤖 AI Match Score
+
+{% if student.match_score is not none %}
+    {% if student.match_score >= 85 %}
+        <span class="badge bg-success">Excellent Match ({{ student.match_score }}%)</span>
+    {% elif student.match_score >= 60 %}
+        <span class="badge bg-primary">Good Match ({{ student.match_score }}%)</span>
+    {% else %}
+        <span class="badge bg-warning text-dark">Average Match ({{ student.match_score }}%)</span>
+    {% endif %}
+{% else %}
+    <span class="badge bg-secondary">Pending Analysis</span>
+{% endif %}
+
+</h5>
+
+<hr>
+
+<h5 class="fw-bold">
+
+✅ Matched Skills
+
+</h5>
+
+<p>
+
+{{ student.matched_skills | default("No matched skills found.", true) }}
+
+</p>
+
+<h5 class="fw-bold mt-4">
+
+❌ Missing Skills
+
+</h5>
+
+<p>
+
+{{ student.missing_skills | default("No missing skills.", true) }}
+
+</p>
+
+<div class="alert alert-info mt-4">
+
+<h5>
+
+🤖 AI Recommendation
+
+</h5>
+
+<p class="mb-0">
+
+{{ student.recommendation | default("No recommendation available.", true) }}
+
+</p>
+
+</div>
+
+<h5 class="fw-bold mt-4">
+
+📝 Resume Summary
+
+</h5>
+
+<p>
+
+{{ student.summary | default("Resume summary not available.", true) }}
+
+</p>
+
+<h5 class="fw-bold mt-4">
+
+💼 Recommended Roles
+
+</h5>
+
+<div class="mb-4">
+
+{% if student.recommended_roles %}
+
+    {% for role in student.recommended_roles.split(",") %}
+
+        <span class="badge bg-primary me-2 mb-2">
+            {{ role.strip() }}
+        </span>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="alert alert-secondary">
+
+    No recommended roles available.
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<!-- Right Side -->
+
+<div class="col-lg-4">
+
+<div class="card bg-light border-0">
+
+<div class="card-body">
+
+<h5 class="fw-bold text-center">
+
+Applicant Actions
+
+</h5>
+
+<hr>
+
+<div class="d-grid gap-3">
+
+<a
+
+href="/shortlist_candidate/{{ job_id }}/{{ student.id }}"
+
+class="btn btn-success">
+
+⭐ Shortlist Candidate
+
+</a>
+
+<a
+
+href="/download_resume/{{ student.id }}"
+
+class="btn btn-primary">
+
+<i class="bi bi-download"></i>
+
+Download Resume
+
+</a>
+
+<a
+
+href="/student_profile/{{ student.id }}"
+
+class="btn btn-outline-primary">
+
+<i class="bi bi-person-circle"></i>
+
+View Profile
+
+</a>
+
+</div>
+
+<hr>
+
+<div class="text-center">
+
+<div class="display-4">
+
+🎯
+
+</div>
+
+<p class="text-muted">
+
+AI recommends this candidate based on
+resume quality, technical skills,
+and job compatibility.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% set rank.value = rank.value + 1 %}
+
+{% endfor %}
+
+{% else %}
+
+<div class="card shadow border-0">
+
+<div class="card-body text-center py-5">
+
+<div class="display-1">
+
+📭
+
+</div>
+
+<h3 class="mt-4">
+
+No Applicants Yet
+
+</h3>
+
+<p class="text-muted">
+
+No student has applied for this job.
+
+</p>
+
+<a
+
+href="/recruiter_dashboard"
+
+class="btn btn-primary mt-3">
+
+Back to Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+{% endif %}
+
+<div class="text-center mt-5">
+
+<a
+
+href="/recruiter_dashboard"
+
+class="btn btn-outline-secondary btn-lg">
+
+<i class="bi bi-arrow-left-circle"></i>
+
+Back to Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+<footer class="text-center mt-5 mb-3 text-muted">
+
+<hr>
+
+<p>
+
+© 2026 <strong>CampusHire AI</strong>
+
+<br>
+
+AI Powered Recruitment Portal
+
+</p>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
